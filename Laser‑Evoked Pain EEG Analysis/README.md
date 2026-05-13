@@ -86,27 +86,44 @@ These results demonstrate **generalizable neural signatures of pain**, not limit
 
 ## 📂 Repository Structure
 
-Laser_Evoked_Pain_EEG/
+Laser_Evoked_Pain_EEG_Analysis/
+
 │
 ├── notebooks/
+
 │   ├── 01_preprocessing.ipynb
+
 │   ├── 02_feature_engineering.ipynb
+
 │   ├── 03_ml_classification.ipynb
+
 │   ├── 04_source_localization.ipynb
+
 │
 ├── src/
+
 │   ├── preprocessing.py
+
 │   ├── features.py
+
 │   ├── ml_models.py
+
 │   ├── source_localization.py
+
 │   ├── visualization.py
+
 │
 ├── results/
+
 │   ├── erp_plots/
+
 │   ├── source_maps/
+
 │   ├── ml_metrics/
+
 │
 ├── README.md
+
 └── requirements.txt
 
 ---
