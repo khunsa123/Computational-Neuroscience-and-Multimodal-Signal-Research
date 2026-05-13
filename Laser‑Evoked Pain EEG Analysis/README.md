@@ -1,122 +1,135 @@
-# 🔥 Pain‑Evoked EEG Analysis (Laser‑Evoked Potentials — ds002338)
+# 🔥 Laser‑Evoked Pain EEG Analysis (OpenNeuro ds002338)
 
-This project analyzes **laser‑evoked pain EEG responses** using the open‑access dataset **ds002338** from OpenNeuro.  
-It extracts **pain‑evoked potentials (LEPs)**, performs **ERP and time–frequency analysis**, and builds **machine learning models** to classify **pain vs non‑pain** trials.
+This project develops and validates a **robust EEG‑based pipeline for objective pain detection**, using the OpenNeuro **ds002338** laser‑evoked pain dataset (N = 24). The analysis integrates advanced EEG preprocessing, multidomain feature engineering, machine learning, and source localization to identify reliable neural biomarkers of nociceptive processing.
 
-This project is directly aligned with research themes at the **Center for Neuroplasticity and Pain (CNAP)**, including:
-- cortical pain processing  
-- laser‑evoked potentials (N2/P2)  
-- pain biomarkers  
-- neuroplasticity in nociceptive pathways  
+This work is directly aligned with research themes in **pain neurophysiology**, **nociceptive evoked potentials**, and **objective pain assessment**, and is currently being prepared as a manuscript for publication.
 
 ---
 
-## 📌 Dataset Overview
+## 📌 Objectives
 
-**Dataset:** OpenNeuro *ds002338*  
-**Modality:** EEG  
-**Task:** Laser‑evoked pain stimulation  
-**Subjects:** Multiple healthy participants  
-**Format:** BIDS‑compliant  
-**Size:** ~150–200 MB (ideal for Google Colab)
-
-Each trial contains:
-- **Painful laser stimuli**
-- **Non‑painful control stimuli**
-- EEG recorded at high temporal resolution
-
----
-
-## 📂 Project Structure
-
-Pain_EEG_Analysis/
-│
-├── notebooks/
-│   ├── 01_download_and_preprocess.ipynb
-│   ├── 02_erp_analysis.ipynb
-│   ├── 03_ml_classification.ipynb
-│
-├── src/
-│   ├── preprocessing.py
-│   ├── feature_extraction.py
-│   ├── ml_models.py
-│   ├── visualization.py
-│
-├── data/                # downloaded automatically (ignored by git)
-├── README.md
-└── requirements.txt
+- Identify electrophysiological biomarkers of laser‑evoked pain  
+- Build a generalizable ML pipeline for pain vs non‑pain classification  
+- Validate neural signatures using source localization  
+- Evaluate cross‑subject generalization using LOSO CV  
 
 ---
 
 ## 🧪 Methods
 
 ### **1. Preprocessing**
-- Load BIDS dataset with MNE‑Python  
-- Bandpass filter (1–40 Hz)  
-- Notch filter (50 Hz)  
-- ICA artifact removal (ocular/muscle)  
-- Epoching around laser stimuli (−0.2 to 0.8 s)
+- ICA‑based artifact rejection  
+- Bandpass filtering (1–40 Hz)  
+- Epoching around laser stimuli (−0.2 to 0.8 s)  
+- Baseline correction  
+- Artifact removal and trial‑level quality control  
 
-### **2. ERP Analysis**
-- Extract N2/P2 components  
-- Compare pain vs non‑pain ERPs  
-- Plot:
-  - grand averages  
-  - topomaps  
-  - butterfly plots  
+### **2. Feature Engineering**
+**ERP Features**
+- N2 amplitude  
+- P2 amplitude  
+- Peak latencies  
+- Global field power  
 
-### **3. Time–Frequency Analysis**
-- Morlet wavelets  
-- Alpha suppression  
-- Gamma bursts  
-- Pain‑specific oscillatory signatures  
+**Spectral Features**
+- Theta power  
+- Theta/Beta Ratio (TBR)  
+- Broadband spectral power  
 
-### **4. Machine Learning Classification**
-- Feature extraction:
-  - N2 amplitude  
-  - P2 amplitude  
-  - Peak latencies  
-  - Band‑power features  
-- Models:
-  - Logistic Regression  
-  - SVM  
-  - Random Forest  
-- Evaluation:
-  - Accuracy  
-  - ROC‑AUC  
-  - Confusion matrix  
+**Hjorth Parameters**
+- Activity  
+- Mobility  
+- Complexity  
+
+### **3. Machine Learning**
+- SMOTE oversampling to address 8:1 class imbalance  
+- Random Forest, SVM, Logistic Regression  
+- **Leave‑One‑Subject‑Out (LOSO)** cross‑validation  
+- Feature importance analysis  
+
+### **4. Source Localization**
+- LCMV beamforming  
+- Noise covariance estimation  
+- Anatomical mapping to cortical pain regions  
+
+---
+
+## 📊 Key Results
+
+### **1. Dominant Biomarker: N2 Amplitude**
+- N2 amplitude showed the strongest group‑level effect  
+- **Cohen’s d = −1.337, p < 0.001**  
+- Indicates early nociceptive processing is the primary discriminator  
+
+### **2. Source Localization**
+- LCMV beamformer localized differential activity to the **caudal Anterior Cingulate Cortex (ACC)**  
+- **Effect size: d = 0.832**  
+- Provides anatomical validation consistent with known pain‑processing hubs  
+
+### **3. Classification Performance**
+Using ERP + Spectral + Hjorth features:
+
+| Metric | Score |
+|--------|--------|
+| Cross‑Validation Accuracy | **90.14%** |
+| LOSO Accuracy | **86.03%** |
+| F1‑Score (Pain Class) | High stability across subjects |
+
+These results demonstrate **generalizable neural signatures of pain**, not limited to individual subjects.
+
+### **4. Spectral Insights**
+- Theta/Beta Ratio (TBR) shifts during pain  
+- Distributed cortical engagement beyond focal ERP peaks  
+- Complementary to ERP‑based biomarkers  
+
+---
+
+## 📂 Repository Structure
+
+Laser_Evoked_Pain_EEG/
+│
+├── notebooks/
+│   ├── 01_preprocessing.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_ml_classification.ipynb
+│   ├── 04_source_localization.ipynb
+│
+├── src/
+│   ├── preprocessing.py
+│   ├── features.py
+│   ├── ml_models.py
+│   ├── source_localization.py
+│   ├── visualization.py
+│
+├── results/
+│   ├── erp_plots/
+│   ├── source_maps/
+│   ├── ml_metrics/
+│
+├── README.md
+└── requirements.txt
 
 ---
 
 ## ▶️ Quick Start (Google Colab)
 
-Run the full pipeline:
-
 ```python
-!pip install mne openneuro-py
+!pip install mne openneuro-py numpy scipy scikit-learn matplotlib
+
+---
 
 from openneuro import download
-download(dataset="ds002338", target_dir="/content/ds002338", include=["sub-01"])
-Then open the notebook:
-notebooks/01_download_and_preprocess.ipynb
+download("ds002338", target_dir="/content/ds002338", include=["sub-01"])
 
-📊 Expected Results
-Clear N2/P2 components for pain trials
+---
 
-Strong ERP differences between pain vs non‑pain
+📝 Manuscript Status
+This work is currently being prepared as:
 
-ML classifier accuracy typically 70–85% depending on features
-
-Time–frequency signatures consistent with nociceptive processing
-
-📝 Notes
-Only one subject is needed for demonstration; more subjects improve robustness.
-
-All preprocessing steps follow standard EEG pain‑evoked potential pipelines.
-
-Dataset is small and ideal for Colab.
+Iftikhar, K. (in prep). Laser‑Evoked Pain EEG Biomarkers: ERP, Spectral, and Source‑Level Signatures for Objective Pain Detection.
 
 👩‍🔬 Author
 Khunsa Iftikhar  
 Computational Neuroscience & AI Researcher
-Multimodal Neurophysiology & Machine Learning
+EEG • Pain Neurophysiology • Machine Learning
+GitHub: https://github.com/khunsa123
