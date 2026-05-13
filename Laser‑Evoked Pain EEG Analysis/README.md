@@ -132,12 +132,12 @@ Laser_Evoked_Pain_EEG_Analysis/
 
 ```python
 !pip install mne openneuro-py numpy scipy scikit-learn matplotlib
+```
 
----
-
+```bash
 from openneuro import download
 download("ds002338", target_dir="/content/ds002338", include=["sub-01"])
-
+```
 ---
 
 📝 Manuscript Status
@@ -145,6 +145,7 @@ This work is currently being prepared as:
 
 Iftikhar, K. (in prep). Laser‑Evoked Pain EEG Biomarkers: ERP, Spectral, and Source‑Level Signatures for Objective Pain Detection.
 
+---
 👩‍🔬 Author
 Khunsa Iftikhar  
 Computational Neuroscience & AI Researcher
