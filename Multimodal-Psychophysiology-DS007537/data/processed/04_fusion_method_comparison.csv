@@ -1,0 +1,3 @@
+Metric,Tuned GB (Early Fusion),Late Fusion (Averaging)
+Accuracy,0.8115942028985508,0.34782608695652173
+Weighted F1 Score,0.7861471861471861,0.2192157761981197
